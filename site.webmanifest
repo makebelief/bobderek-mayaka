@@ -1,0 +1,9 @@
+{
+  "name": "Bobderek Mayaka",
+  "short_name": "Bobderek Mayaka",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1D374E",
+  "icons": []
+}

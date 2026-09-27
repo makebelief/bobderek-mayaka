@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title>Professional legal profile</title><desc>An open legal book and pen representing legal training and practice</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#142C40"/><stop offset="1" stop-color="#294A65"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CCB08F"/><stop offset="1" stop-color="#AA9373"/></linearGradient>
+ <filter id="shadow"><feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#07131d" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1200" height="900" rx="56" fill="url(#bg)"/>
+<circle cx="980" cy="130" r="210" fill="none" stroke="#486C8E" stroke-width="2" opacity=".55"/>
+<circle cx="1050" cy="770" r="300" fill="none" stroke="#486C8E" stroke-width="2" opacity=".3"/>
+
+<g transform="translate(120 155)" filter="url(#shadow)">
+ <path d="M40 160c190-70 330-30 440 60v380c-128-86-282-110-440-55Z" fill="#F7F4EF"/>
+ <path d="M880 160c-190-70-330-30-440 60v380c128-86 282-110 440-55Z" fill="#EEE7DE"/>
+ <path d="M440 220v380" stroke="#AA9373" stroke-width="14"/>
+ <g stroke="#486C8E" stroke-width="10" stroke-linecap="round" opacity=".75">
+  <path d="M95 265h245M95 315h270M95 365h225M95 415h255"/>
+  <path d="M535 265h245M535 315h270M535 365h225M535 415h255"/>
+ </g>
+ <g transform="translate(670 30) rotate(18)">
+  <rect width="52" height="390" rx="24" fill="url(#gold)"/>
+  <path d="M0 390h52L26 455Z" fill="#F7F4EF"/>
+ </g>
+</g>
+
+</svg>

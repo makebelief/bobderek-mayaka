@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title>Legal services</title><desc>Scales of justice with structured legal files</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#142C40"/><stop offset="1" stop-color="#294A65"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CCB08F"/><stop offset="1" stop-color="#AA9373"/></linearGradient>
+ <filter id="shadow"><feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#07131d" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1200" height="900" rx="56" fill="url(#bg)"/>
+<circle cx="980" cy="130" r="210" fill="none" stroke="#486C8E" stroke-width="2" opacity=".55"/>
+<circle cx="1050" cy="770" r="300" fill="none" stroke="#486C8E" stroke-width="2" opacity=".3"/>
+
+<g transform="translate(120 120)" filter="url(#shadow)">
+ <rect x="45" y="510" width="560" height="44" rx="16" fill="#CCB08F"/>
+ <rect x="300" y="80" width="34" height="430" rx="17" fill="#F7F4EF"/>
+ <rect x="245" y="70" width="144" height="34" rx="17" fill="#F7F4EF"/>
+ <path d="M317 150H100M317 150H535" stroke="#F7F4EF" stroke-width="20" stroke-linecap="round"/>
+ <path d="M100 150 45 300h110L100 150Zm435 0-55 150h110L535 150Z" fill="none" stroke="#CCB08F" stroke-width="16"/>
+ <path d="M42 300c10 68 114 68 120 0M477 300c10 68 114 68 120 0" fill="#AA9373"/>
+</g>
+<g transform="translate(760 230)">
+ <rect width="300" height="360" rx="26" fill="#F7F4EF" opacity=".97"/>
+ <rect x="38" y="52" width="224" height="20" rx="10" fill="#294A65"/>
+ <rect x="38" y="105" width="174" height="14" rx="7" fill="#AA9373"/>
+ <rect x="38" y="150" width="224" height="14" rx="7" fill="#486C8E"/>
+ <rect x="38" y="194" width="188" height="14" rx="7" fill="#486C8E"/>
+ <rect x="38" y="238" width="208" height="14" rx="7" fill="#486C8E"/>
+ <circle cx="235" cy="307" r="32" fill="#AA9373"/>
+</g>
+
+</svg>

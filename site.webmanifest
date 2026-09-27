@@ -3,7 +3,13 @@
   "short_name": "Bobderek Mayaka",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FFFFFF",
+  "background_color": "#F5F0E7",
   "theme_color": "#1D374E",
-  "icons": []
+  "icons": [
+    {
+      "src": "/images/bobderek-mayaka-mark.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }

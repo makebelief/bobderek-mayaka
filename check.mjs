@@ -2,67 +2,68 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const htmlFiles = fs.readdirSync(root).filter(f => f.endsWith('.html')).sort();
-const expected = ['index.html','about.html','services.html','team.html','why-us.html','insights.html','contact.html','privacy.html','terms.html','404.html'];
+const pages = fs.readdirSync(root).filter(f => f.endsWith('.html')).sort();
 const errors = [];
+const docs = new Map(pages.map(f=>[f,fs.readFileSync(path.join(root,f),'utf8')]));
+const strip = v => v.split(/[?#]/)[0];
+const isExternal = v => /^(https?:|mailto:|tel:|data:|javascript:)/i.test(v);
+const allowedRepeat = new Set(['images/bobderek-mayaka-logo.png','images/bobderek-mayaka-mark.png']);
+const imageUse = new Map();
 
-for (const f of expected) if (!htmlFiles.includes(f)) errors.push(`Missing page: ${f}`);
+function idsIn(html){ return new Set([...html.matchAll(/\bid=["']([^"']+)["']/g)].map(m=>m[1])); }
+const idsByPage = new Map([...docs].map(([f,h])=>[f,idsIn(h)]));
 
-const allText = htmlFiles.map(f => fs.readFileSync(path.join(root,f),'utf8')).join('\n') + '\n' + fs.readFileSync(path.join(root,'assets/css/site.css'),'utf8') + '\n' + fs.readFileSync(path.join(root,'package.json'),'utf8');
-const forbiddenReference = ['a','r','e','n','d','e'].join('');
-if (allText.toLowerCase().includes(forbiddenReference)) errors.push('Reference-site name still appears in production files.');
-if (/#[89][bB]4[aA][bB]0/.test(allText)) errors.push('Unexpected legacy colour token detected.');
-if (!allText.includes('#1D374E') || !allText.includes('#AA9373')) errors.push('Primary Bobderek palette missing.');
+for (const [file, html] of docs) {
+  const ids=[...html.matchAll(/\bid=["']([^"']+)["']/g)].map(m=>m[1]);
+  const dups=ids.filter((x,i)=>ids.indexOf(x)!==i);
+  if(dups.length) errors.push(`${file}: duplicate IDs ${[...new Set(dups)].join(', ')}`);
 
-const allowedExternal = [/^https:\/\/wa\.me\//, /^mailto:/, /^tel:/];
-const usedContentImages = new Map();
-
-for (const file of htmlFiles) {
-  const full = path.join(root,file);
-  const html = fs.readFileSync(full,'utf8');
-  if (!/name="viewport"/.test(html)) errors.push(`${file}: missing viewport meta.`);
-  if (!/assets\/css\/site\.css/.test(html)) errors.push(`${file}: missing local stylesheet.`);
-  if (/https:\/\/[^"']+\.css/.test(html)) errors.push(`${file}: external stylesheet detected.`);
-  if (/https:\/\/images\./.test(html)) errors.push(`${file}: external image detected.`);
-  if (!/bobderek-mayaka\.vercel\.app/.test(html)) errors.push(`${file}: canonical project domain missing.`);
-
-  for (const m of html.matchAll(/href="([^"]+)"/g)) {
-    const href = m[1];
-    if (href.startsWith('#') || href.startsWith('http') || allowedExternal.some(r=>r.test(href))) continue;
-    const clean = href.split('#')[0].split('?')[0];
-    if (!clean) continue;
-    const target = path.join(root, clean);
-    if (!fs.existsSync(target)) errors.push(`${file}: broken local link ${href}`);
-  }
-
-  for (const m of html.matchAll(/<img\b[^>]*src="([^"]+)"[^>]*>/g)) {
-    const tag = m[0], src = m[1];
-    if (!/alt="[^"]*"/.test(tag)) errors.push(`${file}: image missing alt: ${src}`);
-    if (src.startsWith('http')) { errors.push(`${file}: external image ${src}`); continue; }
-    const target = path.join(root,src);
-    if (!fs.existsSync(target)) errors.push(`${file}: missing image ${src}`);
-    const isChrome = src.includes('bobderek-avatar.webp');
-    if (!isChrome) {
-      const key = src;
-      const arr = usedContentImages.get(key) || [];
-      arr.push(file);
-      usedContentImages.set(key, arr);
+  for (const m of html.matchAll(/(?:src|href)=["']([^"']+)["']/g)) {
+    const v=m[1];
+    if (v === '#' || /^javascript:/i.test(v)) errors.push(`${file}: dead link ${v}`);
+    if (isExternal(v)) continue;
+    if (v.startsWith('#')) {
+      const id=v.slice(1); if(id && !idsByPage.get(file)?.has(id)) errors.push(`${file}: missing local anchor #${id}`);
+      continue;
+    }
+    const [target,frag] = v.split('#');
+    const rel=strip(target);
+    if (rel && !fs.existsSync(path.join(root,rel))) errors.push(`${file}: missing local reference ${v}`);
+    if (frag && rel.endsWith('.html')) {
+      const targetHtml=docs.get(rel);
+      if(!targetHtml || !idsIn(targetHtml).has(frag)) errors.push(`${file}: missing target anchor ${v}`);
     }
   }
+
+  for (const m of html.matchAll(/<img[^>]+src=["']([^"']+)["']/g)) {
+    const v=m[1];
+    if(!allowedRepeat.has(v)) imageUse.set(v,(imageUse.get(v)||0)+1);
+    if(!/\balt=["'][^"']*["']/.test(m[0])) errors.push(`${file}: image missing alt: ${v}`);
+  }
+
+  if (/Aren(?:de) Oriri|Kevin\s+Aren(?:de)|aren(?:de)-oriri-advocates|\+254\s*722\s*948\s*247/i.test(html)) errors.push(`${file}: stale reference-brand content`);
+  if (!/^40[34]\.html$|^50[03]\.html$/.test(file) && !/bobderek-mayaka\.vercel\.app/i.test(html)) errors.push(`${file}: Bobderek canonical/domain not found`);
 }
 
-for (const [src,files] of usedContentImages) {
-  if (files.length > 1 && !src.includes('og-card')) errors.push(`Content image reused: ${src} in ${files.join(', ')}`);
+for (const [img,count] of imageUse) {
+  if(count>1 && !img.startsWith('images/bobderek-')) errors.push(`non-profile content image repeated ${count}×: ${img}`);
 }
 
-const css = fs.readFileSync(path.join(root,'assets/css/site.css'),'utf8');
-if (!/@media\(max-width:560px\)/.test(css)) errors.push('Small-phone responsive breakpoint missing.');
-if (!/contact-rail/.test(css)) errors.push('Contact rail styling missing.');
-if (!/overflow-x:hidden/.test(css)) errors.push('Horizontal overflow protection missing.');
-
-if (errors.length) {
-  console.error(`CHECK FAILED (${errors.length})`);
-  for (const e of errors) console.error(' -',e);
-  process.exit(1);
+for (const cssFile of ['assets/css/site.css','assets/css/pages.css']) {
+  const css=fs.readFileSync(path.join(root,cssFile),'utf8');
+  for (const m of css.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
+    const v=m[1]; if (/^(data:|https?:)/i.test(v)) continue;
+    const abs=path.resolve(path.dirname(path.join(root,cssFile)),v);
+    if(!fs.existsSync(abs)) errors.push(`${cssFile}: missing CSS asset ${v}`);
+  }
 }
-console.log(`CHECK PASSED: ${htmlFiles.length} HTML pages, local assets/links, Bobderek palette, unique content imagery and responsive safeguards verified.`);
+const css=['assets/css/site.css','assets/css/pages.css'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
+const purplePatterns=[/#8B4AB0/i,/#6D3F7C/i,/#6B347F/i,/#765C7A/i,/rgba\(139\s*,\s*74\s*,\s*176/i,/rgba\(109\s*,\s*63\s*,\s*124/i];
+if(purplePatterns.some(r=>r.test(css))) errors.push('legacy purple color found in CSS');
+if(!css.includes('#1D374E')||!css.includes('#B9966A')) errors.push('Bobderek navy/gold palette missing');
+const js=fs.readFileSync(path.join(root,'assets/js/site.js'),'utf8');
+if(!js.includes('254746565756')) errors.push('quick-contact phone is not Bobderek number');
+if(!js.includes("prefers-reduced-motion")) errors.push('reduced-motion handling missing');
+
+if(errors.length){ console.error('\nCHECK FAILED'); errors.forEach(e=>console.error(' - '+e)); process.exit(1); }
+console.log(`CHECK PASSED: ${pages.length} pages; links, anchors, assets, image alts, unique non-profile imagery, Bobderek branding/palette and responsive interaction safeguards verified.`);

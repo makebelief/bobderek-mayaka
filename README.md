@@ -1,15 +1,7 @@
 # Bobderek Mayaka
 
-Static, mobile-first legal website for Bobderek Mayaka.
+Multi-page legal-practice website for Bobderek Mayaka, Advocate of the High Court of Kenya.
 
-## Check
+The layout is adapted from the approved professional-services reference structure while all branding, copy, contact information and imagery are Bobderek-specific.
 
-```bash
-npm run check
-```
-
-## Deploy
-
-```bash
-vercel --prod --yes
-```
+Run `npm run check` before deployment.

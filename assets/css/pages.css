@@ -283,3 +283,73 @@
   .profile-large-image{height:260px}
 }
 /* === 2026-09-28 PAGE POLISH END === */
+
+
+/* === COMPACT EDITORIAL TILE SYSTEM 2026-09-28 === */
+/* Hero images may stay full bleed. All other page photography is a compact tile. */
+.profile-large-image{height:225px}
+.profile-large-image img{object-fit:cover;object-position:center}
+.profile-large-image img[src*="bobderek-profile-card"]{object-position:center top}
+
+.image-split{
+  grid-template-columns:minmax(250px,360px) minmax(0,1fr);
+  gap:34px;
+  align-items:center;
+  background:transparent;
+}
+.image-split img{
+  width:100%;
+  height:260px;
+  min-height:0;
+  object-fit:cover;
+  border:1px solid var(--line);
+}
+.image-split-copy{padding:24px 0}
+.image-split-copy h2{font-size:clamp(34px,4.3vw,58px)}
+
+/* Service pages: photography behaves like an editorial tile beside the text. */
+.service-editorial-card,
+.service-editorial-card:nth-child(even){
+  grid-template-columns:260px minmax(0,1fr);
+  min-height:240px;
+}
+.service-editorial-card:nth-child(even) .service-detail-image{order:1}
+.service-editorial-card:nth-child(even) .service-detail-body{order:2}
+.service-editorial-card .service-detail-image{height:240px;min-height:0;margin:18px}
+.service-editorial-card .service-detail-image img{height:100%;object-fit:cover}
+.service-editorial-card .service-detail-body{min-height:240px;padding:30px 34px 30px 12px}
+.service-editorial-card h3{margin-top:18px;font-size:clamp(27px,2.6vw,38px)}
+.service-editorial-card p{margin-top:13px}
+.service-editorial-card small{margin-top:20px}
+
+/* Why-us and insight cards use modest tiles. */
+.principle-feature-card .detail-card-image{height:190px}
+.insight-feature img{height:190px}
+
+@media (max-width:1020px){
+  .image-split{grid-template-columns:280px minmax(0,1fr);gap:28px}
+  .image-split img{height:235px}
+  .service-editorial-card,.service-editorial-card:nth-child(even){grid-template-columns:230px minmax(0,1fr)}
+  .service-editorial-card .service-detail-image{height:210px;margin:16px}
+  .service-editorial-card .service-detail-body{padding:26px 28px 26px 6px}
+}
+@media (max-width:760px){
+  .image-split{grid-template-columns:1fr;gap:20px}
+  .image-split img{height:210px;max-width:460px}
+  .image-split-copy{padding:0}
+  .profile-large-image{height:205px}
+  .service-editorial-card,.service-editorial-card:nth-child(even){grid-template-columns:1fr}
+  .service-editorial-card .service-detail-image,.service-editorial-card:nth-child(even) .service-detail-image{
+    order:1;
+    height:190px;
+    margin:14px 14px 0;
+  }
+  .service-editorial-card .service-detail-body,.service-editorial-card:nth-child(even) .service-detail-body{
+    order:2;
+    min-height:0;
+    padding:24px 22px 28px;
+  }
+  .principle-feature-card .detail-card-image{height:185px}
+  .insight-feature img{height:185px}
+}
+/* === END COMPACT EDITORIAL TILE SYSTEM === */

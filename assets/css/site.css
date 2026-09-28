@@ -703,3 +703,69 @@ img[src^="https://images.unsplash.com/"]{
   .page-hero-image[src^="https://images.unsplash.com/"]{object-position:center 42%}
 }
 /* === 2026-09-28 IMAGE DIVERSITY PASS END === */
+
+
+/* === LOCAL IMAGE + TILE LAYOUT FIX 2026-09-28 === */
+/* All editorial photography is bundled locally: no remote/hotlinked image dependency. */
+img[src^="images/editorial/"]{display:block;width:100%;height:100%;object-fit:cover}
+
+/* Non-hero imagery stays deliberately compact: tiles, not half-page billboards. */
+.about-layout{
+  grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr);
+  gap:clamp(34px,6vw,78px);
+  align-items:center;
+}
+.about-media{
+  width:min(100%,430px);
+  justify-self:start;
+  border:1px solid var(--line);
+  border-radius:2px;
+}
+.about-media img{height:300px;aspect-ratio:auto;object-fit:cover}
+
+.team-feature{
+  grid-template-columns:minmax(260px,.68fr) minmax(0,1.32fr);
+  align-items:stretch;
+}
+.team-feature-image{min-height:0;height:320px}
+.team-feature-copy{min-height:320px;padding:34px 38px}
+
+.homepage .brand-motion-grid{
+  grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);
+  align-items:center;
+}
+.homepage .brand-motion-media{justify-content:flex-end;align-items:center}
+.brand-motion-portrait{
+  width:min(100%,420px);
+  grid-template-rows:260px auto;
+  margin:0 0 0 auto;
+  box-shadow:none;
+}
+.brand-motion-portrait img{min-height:0;height:260px;object-fit:cover}
+.brand-motion-portrait figcaption{padding:18px 20px 20px;font-size:12px}
+.brand-motion-portrait figcaption strong{font-size:20px}
+
+/* Homepage insight imagery remains compact editorial tiles. */
+.insight-image{height:190px}
+.insight-card{min-height:360px}
+
+@media (max-width:1020px){
+  .about-layout{grid-template-columns:minmax(240px,.78fr) minmax(0,1.22fr);gap:34px}
+  .about-media img{height:270px}
+  .team-feature{grid-template-columns:minmax(240px,.8fr) minmax(0,1.2fr)}
+  .team-feature-image{height:300px}
+  .homepage .brand-motion-grid{grid-template-columns:1fr 360px;gap:34px}
+}
+@media (max-width:680px){
+  .about-layout{grid-template-columns:1fr;gap:28px}
+  .about-media{width:100%;max-width:420px;order:2}
+  .about-media img{height:220px}
+  .team-feature{grid-template-columns:1fr}
+  .team-feature-image{height:220px;min-height:0}
+  .team-feature-copy{min-height:0;padding:28px 22px}
+  .homepage .brand-motion-grid{grid-template-columns:1fr;gap:30px}
+  .brand-motion-portrait{width:100%;max-width:420px;margin:0;grid-template-rows:220px auto}
+  .brand-motion-portrait img{height:220px}
+  .insight-image{height:185px}
+}
+/* === END LOCAL IMAGE + TILE LAYOUT FIX === */

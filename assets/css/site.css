@@ -684,3 +684,22 @@ html,body{max-width:100%;overflow-x:hidden}
   .page-hero-image{object-position:center 30%}
 }
 /* === 2026-09-28 UX POLISH END === */
+
+
+/* === 2026-09-28 IMAGE DIVERSITY PASS START === */
+/* Contextual stock photography now carries supporting sections. Bobderek's portrait is reserved for profile-led moments. */
+img[src^="https://images.unsplash.com/"]{
+  display:block;
+  width:100%;
+  max-width:none;
+  object-fit:cover;
+  filter:none;
+}
+.brand-motion-portrait img[src^="https://images.unsplash.com/"]{object-position:center 45%}
+.profile-large-image img[src^="https://images.unsplash.com/"]{object-position:center}
+.page-hero-image[src^="https://images.unsplash.com/"]{object-position:center 45%}
+@media(max-width:680px){
+  .brand-motion-portrait img[src^="https://images.unsplash.com/"]{object-position:center}
+  .page-hero-image[src^="https://images.unsplash.com/"]{object-position:center 42%}
+}
+/* === 2026-09-28 IMAGE DIVERSITY PASS END === */

@@ -265,3 +265,21 @@
   background: #B9966A !important;
 }
 /* === CONTACT DARK PANEL CONTRAST FIX END === */
+
+
+
+/* === 2026-09-28 PAGE POLISH START === */
+.page-hero-image{object-fit:cover;object-position:center 35%;filter:none}
+.profile-large-image img,
+.detail-card-image img,
+.image-split img{filter:none}
+.profile-large-image img{object-position:center top}
+.insight-feature img{filter:none}
+.insight-feature{overflow:hidden}
+.insight-feature img{height:100%;object-fit:cover}
+@media (max-width:680px){
+  .page-intro h2{font-size:clamp(34px,10vw,48px)}
+  .image-split img{min-height:260px}
+  .profile-large-image{height:260px}
+}
+/* === 2026-09-28 PAGE POLISH END === */
